@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
-const port = 3436
+const port = 3000
 const bodyParser= require('body-parser')
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 //
 // Requirement for set up the exercise
@@ -30,20 +31,45 @@ let recipes = [
     { id:3, name: 'Pizza with peppers', ingredients:["pasta","onion", "peppers", "ham", "tomato sauce", "cheese"], purchasePrice:80, sellingPrice:110}
 ]
 
+
+
+
+
 // Question 1 : As a manager you want to fetch all the recipe. 
 // Create a HTTP Request :
+app.get('/recipes/', function (req, res) {
+    res.send(recipes);
+  })
 
 
 // Question 2 : As a manager you want to get only one recipe depends on his id.
 // Create a HTTP Request :
+app.get('/recipes/:id', function (req, res) {
+    var recipesId = req.params.id;
+    res.send(recipes[recipesId]);
+  })
 
 
 // Question 3 : As a manager you want to modify the selling price of only one recipe.
 // Create a HTTP Request :
+app.put('/recipes/:id', function (req, res) {
+    var recipesId = req.params.id;
+    recipes.findOneAndUpdate({ _id: recipesId }, {$set: recipes[req.params.sellingPrice]}, { new: true }, (err, doc) => {
+        if (err) {
+            rest.send("Unable to update item. Error JSON:");
+        } else {
+            rest.send("UpdateItem succeeded:");
+        }
+    })
+  })
 
 
 // Question 4 : As a manager you want to delete one recipe from the recipes list
 // Create a HTTP Request :
+app.delete('/recipes/:id', function (req, res) {
+    var recipesId = req.params.id;
+    res.send(recipes[recipesId]);
+  })
 
 
 // Question 5 : As a manager you want to add a new recipe in the recipes list.
